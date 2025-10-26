@@ -1,0 +1,1 @@
+export const TITLE = 'Digital Lesson Generator';

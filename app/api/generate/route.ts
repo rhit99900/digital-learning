@@ -20,7 +20,15 @@ export async function POST(req: NextRequest){
   const response = await openai.chat.completions.create({
     model: 'gpt-4o-mini',
     messages: [{
-      role: 'system', content: 'Generate a valid typescript code for a lesson component. The output should only have code and nothing else.',      
+      role: 'system',
+      content: `
+        Generate a valid typescript code for a lesson component.
+        The output should only have code and nothing else. 
+        The output should also exclude import statements, such as import React.
+        Component declaration must always be of the format \`export default function <ComponentName>\` and must not have any other export statements aside of this.
+        The output code should not have markdown code formatter like "\`\`\`typescript".
+        The output code should not have <pre> or <code> tags.
+      `,
     }, {
       role: 'user', content: `Generate a typescript react component, using tailwindcss, images teaching a lesson for: ${lesson}`
     }]
