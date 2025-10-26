@@ -63,9 +63,10 @@ export async function POST(req: NextRequest){
         Assume that React and all its hooks (useState, useEffect, useRef, etc.) are available as globals.
         Do not include 'import' or 'export' lines for React.
         The component must use 'export default function <Name>()' for the main component.
-        The output code should not have markdown code formatter like "\`\`\`typescript".        
+        The output code should not have markdown code formatter like "\`\`\`typescript". 
         The lesson generated should also have interactive lessons with state management within the generated function for the code.
-        The lessons should be a page long with detailed definitions, steps, if needed. Imaging the lesson is being taught to a 5 year old kid.
+        The lessons should be a page long with detailed definitions within the code, steps, if needed. Imaging the lesson is being taught to a 5 year old kid.
+        Important: The output should not have anything that's not the React Component.
         The output code should not have <pre> or <code> tags.
       `;
 

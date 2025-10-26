@@ -7,7 +7,7 @@ import StoreProvider from "@/components/providers/store-provider";
 export default function Home() {  
 
   return (
-    <section className="container md:w-full px-4 py-2 w-full">          
+    <section className="w-full max-w-5xl flex flex-col justify-between items-center p-3 px-5 text-sm">          
       <StoreProvider>
         <GeneratePage />
         <LessonListings />          

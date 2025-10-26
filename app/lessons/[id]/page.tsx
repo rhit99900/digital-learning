@@ -80,16 +80,15 @@ const LessonPage = ({ params }: LessonPageParams) => {
     )
   } else {
     return (
-      <main className="p-4">
+      <section className="w-full max-w-5xl flex flex-col justify-between items-center p-3 px-5 text-sm">
         <h1>Lesson: <strong>{lesson.lesson}</strong></h1>      
         <div>
           {RenderedComponent ? (
-            <div className="border-t pt-4">
-              <h2 className="font-medium">Live Render:</h2>
+            <div>
               <RenderedComponent />
             </div>
           ): (
-            <p>Waiting for generated lesson to render...</p>
+            <div>Waiting for generated lesson to render...</div>
           )}
         </div>
         <div className="w-full">
@@ -97,7 +96,7 @@ const LessonPage = ({ params }: LessonPageParams) => {
             <DialogTrigger asChild>
               <Button variant="outline">Open Source Code</Button>
             </DialogTrigger>            
-            <DialogContent className="fixed w-screen h-fit max-w-none overflow-auto p-6">
+            <DialogContent className="fixed w-screen h-full max-w-none overflow-auto p-6">
               <DialogHeader>
                 <DialogTitle>Lesson: <strong>{lesson.lesson}</strong></DialogTitle>
                 <p className="text-xs">Created On: {formatDate(lesson.created_at)}</p>
@@ -113,7 +112,7 @@ const LessonPage = ({ params }: LessonPageParams) => {
             </DialogContent>            
           </Dialog>
         </div>
-      </main>
+      </section>
     )
   }
 

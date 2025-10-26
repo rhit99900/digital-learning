@@ -4,7 +4,6 @@ import { fetchLessons } from "@/utils/helper";
 import { unsubscribe, subscribe } from "@/utils/supabase";
 import { useEffect, useState } from "react";
 import LessonItem from './lesson-item';
-import { LessonsType } from "@/lib/types";
 import { Button } from "./ui/button";
 import { LessonSuggestion, SUGGESTIONS } from "@/lib/config";
 import { Badge } from "./ui/badge";
@@ -18,6 +17,8 @@ const LessonListings = () => {
   const lessons = useAppSelector((state: RootState) => state.lesson.lessons);
   const [ page, setPage ] = useState<number>(3);
   const [ count, setCount ] = useState<number>(0);
+
+  const [ suggestions, setSuggestions ] = useState<typeof SUGGESTIONS>([]);
 
   const appDispatch = useAppDispatch();
 
@@ -50,8 +51,14 @@ const LessonListings = () => {
     appDispatch(setLessonInput(suggestion.lesson));
   }
 
+  useEffect(() => {
+    const shuffled = [...SUGGESTIONS].sort(() => 0.5 - Math.random());
+    const count = Math.floor(Math.random() * 2) + 3;
+    setSuggestions(shuffled.slice(0, count));
+  }, []);
+
   return (
-    <main className="w-full flex flex-col gap-2">
+    <main className="w-full flex flex-col gap-2 mt-2">
       {lessons?.slice(0,page)?.map(l => (
         <LessonItem key={l.id} lesson={l}/>
       ))}
@@ -66,12 +73,13 @@ const LessonListings = () => {
         </div>
       ): (
         <>
-          <p className="text-center w-full text-gray-300 text-sm">No lessons available currently. Here are several ready-to-use lesson plan suggestions you can include.</p>
+          <p className="text-center w-full text-gray-300 text-sm">No lessons available currently.</p>
         </>
       ) }
       
-      <div>                
-        {SUGGESTIONS.map((item,index) => (
+      <div>
+        <p className="text-center w-full text-gray-300 text-sm">Here are several ready-to-use lesson plan suggestions you can include.</p>
+        {suggestions.map((item,index) => (
           <div 
             key={`suggestion-${index}`}
             className="w-full cursor-pointer"
@@ -84,7 +92,7 @@ const LessonListings = () => {
             <div className="flex flex-row gap-1">{item.tags.map(tag => (
               <Badge variant="secondary" key={`tag-${tag}-${index}}`}>{tag}</Badge>
             ))}</div>
-            {(index < SUGGESTIONS.length - 1) ? (
+            {(index < suggestions.length - 1) ? (
               <Separator className="mt-2"/>
             ): null}
           </div>
