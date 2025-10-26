@@ -25,10 +25,10 @@ const GeneratePage = () => {
     // appDispatch(setLessonInput(''));
     await streamLessonGeneration(lessonInput, {
       onStep: (status) => setSteps((prev) => [...prev, status]),
-      onToken: (token) => { console.log(`Token: ${token}`)},
+      // onToken: (token) => { console.log(`Token: ${token}`)},
       onError: ((error) => { console.error(error)}),
       onDone: () => {
-        console.log('Done');
+        // console.log('Done');
         setLoading(false);
         setSteps([]);
       }

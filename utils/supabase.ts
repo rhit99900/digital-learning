@@ -13,7 +13,6 @@ export const subscribe = (callback: () => void) => {
       table: 'lessons'    
     }, 
     (payload) => {
-      console.log(`Change Initiated`, payload);
       callback();
     }
   )

@@ -25,7 +25,6 @@ const LessonListings = () => {
   useEffect(() => {
     getLessons();
     const channel = subscribe(() => {
-      console.log("Trigger database change");
       getLessons();
     })
     return () => {
