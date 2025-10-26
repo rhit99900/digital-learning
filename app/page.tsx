@@ -2,26 +2,16 @@ import { ThemeSwitcher } from "@/components/theme-switcher";
 import GeneratePage from "@/components/generate-page";
 import LessonListings from "@/components/list-lessons";
 import { TITLE } from "@/lib/config";
+import StoreProvider from "@/components/providers/store-provider";
 
-export default function Home() {
+export default function Home() {  
+
   return (
-    <main className="min-h-screen flex flex-col items-center">
-      <div className="flex-1 w-full flex flex-col gap-20 items-center">
-        <nav className="w-full flex justify-center border-b border-b-foreground/10 h-16">
-          <div className="w-full max-w-5xl flex justify-between items-center p-3 px-5 text-sm">
-            <div className="flex gap-5 items-center font-semibold">              
-              {TITLE}
-            </div>
-          </div>
-        </nav>
-        <div className="container md:w-full p-[20px] w-full">
-          <GeneratePage />
-          <LessonListings />
-        </div>
-        <footer className="w-full flex items-center justify-center border-t mx-auto text-center text-xs gap-8 py-16">          
-          <ThemeSwitcher />
-        </footer>
-      </div>
-    </main>
+    <section className="container md:w-full px-4 py-2 w-full">          
+      <StoreProvider>
+        <GeneratePage />
+        <LessonListings />          
+      </StoreProvider>
+    </section>
   );
 }

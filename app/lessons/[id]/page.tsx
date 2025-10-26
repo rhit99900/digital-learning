@@ -1,9 +1,13 @@
 'use client';
 
-import { fetchLesson } from "@/utils/helper";
+import { fetchLesson, formatDate } from "@/utils/helper";
 import * as ts from 'typescript';
 import * as Babel from '@babel/standalone';
 import React, { useEffect, useState, use } from "react";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { LessonsType } from "@/lib/types";
+import { Button } from "@/components/ui/button";
+import { Progress } from "@/components/ui/progress";
 
 type LessonPageParams = {
   params: Promise<{
@@ -14,8 +18,9 @@ type LessonPageParams = {
 const LessonPage = ({ params }: LessonPageParams) => {
 
   const { id } = use(params);
-  const [ lesson, setLesson ] = useState<any>();
+  const [ lesson, setLesson ] = useState<LessonsType>();
   const [ RenderedComponent, setRenderedComponent ] = useState<React.FC | null>(null);
+  const [ progress, setProgress ] = useState<number>(10);
   
   useEffect(() => {
     getLesson();
@@ -36,7 +41,12 @@ const LessonPage = ({ params }: LessonPageParams) => {
       }).code;
 
       const componentModule = {};
-      new Function('React','exports', compiled!)(React, componentModule);
+      new Function('React','useState', 'useEffect', 'exports', compiled!)(
+        React,
+        React.useState,
+        React.useEffect,
+        componentModule,
+      );
 
       const Component = (componentModule as any).default;
       if(Component) setRenderedComponent(() => Component);
@@ -53,29 +63,59 @@ const LessonPage = ({ params }: LessonPageParams) => {
       compileAndRender(data.generated_code);
     }
   }  
-  
-  if(!lesson) return <p>Loading...</p>  
 
-  return (
-    <main className="p-4">
-      <h1>Lesson</h1>
-      <div className="text-xs border-2 w-full p-4 overflow-scroll h-[200px]">
-        <pre>
-          {lesson.generated_code}
-        </pre>
+  useEffect(() => {
+    const timer = setTimeout(() => setProgress(89), 200);
+    return () => clearTimeout(timer);
+  }, [])
+  
+  if(!lesson) {
+    return (
+      <div className="w-full h-[400px] flex justify-center items-center">
+        <div className="w-[50%]">
+          Loading...
+          <Progress value={progress} className="w-full" />
+        </div>
       </div>
-      <div>
-        {RenderedComponent ? (
-          <div className="border-t pt-4">
-            <h2 className="font-medium">Live Render:</h2>
-            <RenderedComponent />
-          </div>
-        ): (
-          <p>Waiting for generated lesson to render...</p>
-        )}
-      </div>
-    </main>
-  )
+    )
+  } else {
+    return (
+      <main className="p-4">
+        <h1>Lesson: <strong>{lesson.lesson}</strong></h1>      
+        <div>
+          {RenderedComponent ? (
+            <div className="border-t pt-4">
+              <h2 className="font-medium">Live Render:</h2>
+              <RenderedComponent />
+            </div>
+          ): (
+            <p>Waiting for generated lesson to render...</p>
+          )}
+        </div>
+        <div className="w-full">
+          <Dialog>            
+            <DialogTrigger asChild>
+              <Button variant="outline">Open Source Code</Button>
+            </DialogTrigger>            
+            <DialogContent className="fixed w-screen h-fit max-w-none overflow-auto p-6">
+              <DialogHeader>
+                <DialogTitle>Lesson: <strong>{lesson.lesson}</strong></DialogTitle>
+                <p className="text-xs">Created On: {formatDate(lesson.created_at)}</p>
+                <p className="text-xs font-thin">This code snippet is AI Generated using Open AI model <strong>gpt-4o-mini</strong></p>
+              </DialogHeader>
+              <DialogDescription asChild>
+                <div className="text-xs border rounded p-4 bg-gray-900 text-gray-100 font-mono whitespace-pre-wrap break-words overflow-auto">
+                  <pre className="whitsspace-pre-wrap break-words">
+                    {lesson.generated_code}
+                  </pre>
+                </div>
+              </DialogDescription>
+            </DialogContent>            
+          </Dialog>
+        </div>
+      </main>
+    )
+  }
 
 }
 
