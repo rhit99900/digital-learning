@@ -3,7 +3,7 @@
 import { fetchLesson, formatDate } from "@/utils/helper";
 import * as ts from 'typescript';
 import * as Babel from '@babel/standalone';
-import React, { useEffect, useState, use } from "react";
+import React, { useEffect, useState, use, useRef } from "react";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { LessonsType } from "@/lib/types";
 import { Button } from "@/components/ui/button";
@@ -41,10 +41,11 @@ const LessonPage = ({ params }: LessonPageParams) => {
       }).code;
 
       const componentModule = {};
-      new Function('React','useState', 'useEffect', 'exports', compiled!)(
+      new Function('React','useState', 'useEffect', 'useRef' ,'exports', compiled!)(
         React,
         React.useState,
         React.useEffect,
+        React.useRef,
         componentModule,
       );
 

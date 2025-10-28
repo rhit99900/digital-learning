@@ -17,7 +17,7 @@ const ItemLoading = ({steps}: ItemLoadingProps) => {
         <ItemContent>
           <ItemTitle className="line-clamp-1">Generating Lesson</ItemTitle>
         </ItemContent>
-        <ItemContent className="flex-none justify-end">
+        <ItemContent className="flex-none w-full justify-end">
           {steps.length ? (
             <div>
               <strong className="text-sm">Steps:</strong>              

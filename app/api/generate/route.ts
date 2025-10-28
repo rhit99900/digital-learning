@@ -10,7 +10,7 @@ function serverEvent (name: string, data: unknown) {
   return `event: ${name}\ndata: ${JSON.stringify(data)}\n\n`;
 }
 
-
+const model = 'gpt-5';
 
 export async function POST(req: NextRequest){
   const { lesson } = await req.json();  
@@ -79,9 +79,9 @@ export async function POST(req: NextRequest){
       await write(serverEvent("step", { status: `Generating user prompt ${prompt}`, lesson }));
       // Step 7: Initiating API request to OpenAI      
 
-      await write(serverEvent("step", { status: 'Calling OpenAI Model: `gpt-4o-mini`', model: 'gpt-4o-mini'}));
+      await write(serverEvent("step", { status: `Calling OpenAI Model: \`${model}\``, model: model}));
       const response = await openai.chat.completions.create({
-        model: 'gpt-4o-mini',
+        model: model,
         stream: true,
         messages: [{
           role: 'system',
@@ -93,6 +93,7 @@ export async function POST(req: NextRequest){
 
       let generatedCode = '';
       for await (const part of response) {
+        // console.log(part.choices?.[0]?.delta);
         const token = part.choices?.[0]?.delta?.content ?? "";
         if (token) {
           generatedCode += token;          
