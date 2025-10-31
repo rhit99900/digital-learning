@@ -41,11 +41,12 @@ const LessonPage = ({ params }: LessonPageParams) => {
       }).code;
 
       const componentModule = {};
-      new Function('React','useState', 'useEffect', 'useRef' ,'exports', compiled!)(
+      new Function('React','useState', 'useEffect', 'useRef', 'useMemo','exports', compiled!)(
         React,
         React.useState,
         React.useEffect,
         React.useRef,
+        React.useMemo,
         componentModule,
       );
 
